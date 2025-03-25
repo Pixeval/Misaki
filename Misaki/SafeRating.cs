@@ -1,9 +1,11 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Misaki;
 
 /// <remarks>
 /// <seealso href="https://danbooru.donmai.us/wiki_pages/howto:rate"/>
 /// </remarks>
-public readonly record struct SafeRating(sbyte SafeRatingValue)
+public readonly record struct SafeRating(sbyte SafeRatingValue) : IParsable<SafeRating>
 {
     private const sbyte NotSpecifiedValue = -1; 
 
@@ -51,4 +53,23 @@ public readonly record struct SafeRating(sbyte SafeRatingValue)
     public bool IsR18 => IsExplicit;
 
     public bool IsR18G => IsGuro;
+
+    public static SafeRating Parse(string? s, IFormatProvider? provider = null) =>
+        s switch
+        {
+            "q" or "questionable" => Questionable,
+            "s" or "sensitive" => Sensitive,
+            "g" or "general" => General,
+            "e" or "explicit" => Explicit,
+            _ => NotSpecified
+        };
+
+    public static bool TryParse([NotNullWhen(true)] string? s, IFormatProvider? provider, out SafeRating result)
+        => TryParse(s, out result);
+
+    public static bool TryParse([NotNullWhen(true)] string? s, out SafeRating result)
+    {
+        result = Parse(s);
+        return true;
+    }
 }
