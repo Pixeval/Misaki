@@ -4,7 +4,17 @@ public interface IIdentityInfo : IMisakaModel
 {
     string Platform { get; }
 
-    long Id { get; }
+    string Id { get; }
 
     const string Pixiv = "pixiv";
+
+    const string Danbooru = "danbooru";
+
+    const string Yandere = "yandere";
+
+    const string Sankaku = "sankaku";
+
+    const string Gelbooru = "gelbooru";
+
+    const string Rule34 = "rule34";
 }
