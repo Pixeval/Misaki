@@ -1,7 +1,11 @@
 namespace Misaki;
 
-public record ImageFrame(int Width, int Height) : IImageFrame
+public record ImageFrame() : IImageFrame
 {
+    public int Width { get; init; } = -1;
+
+    public int Height { get; init; } = -1;
+
     public ulong ByteSize { get; init; }
 
     public required Uri ImageUri { get; init; }
@@ -10,6 +14,12 @@ public record ImageFrame(int Width, int Height) : IImageFrame
         :this (isWidth ? wh : (int) ((double) wh * frame.Width) / frame.Height,
             isWidth ? (int) ((double) wh * frame.Height) / frame.Width : wh)
     {
+    }
+
+    public ImageFrame(int width, int height) : this()
+    {
+        Width = width;
+        Height = height;
     }
 
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
