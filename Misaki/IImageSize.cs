@@ -1,6 +1,6 @@
 namespace Misaki;
 
-public interface IImageSize : IMisakaModel
+public interface IImageSize : IMisakiModel
 {
     int Width { get; }
 

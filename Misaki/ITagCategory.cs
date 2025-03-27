@@ -1,6 +1,6 @@
 namespace Misaki;
 
-public interface ITagCategory : IMisakaModel
+public interface ITagCategory : IMisakiModel
 {
     static ITagCategory Empty { get; } = new EmptyCategory();
 

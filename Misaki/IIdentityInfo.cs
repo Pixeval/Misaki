@@ -1,6 +1,6 @@
 namespace Misaki;
 
-public interface IIdentityInfo : IMisakaModel
+public interface IIdentityInfo : IMisakiModel
 {
     string Platform { get; }
 

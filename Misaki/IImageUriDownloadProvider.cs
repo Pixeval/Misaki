@@ -1,6 +1,6 @@
 namespace Misaki;
 
-public interface IImageUriDownloadProvider : IMisakaService
+public interface IImageUriDownloadProvider : IMisakiService
 {
     string Schema { get; }
 

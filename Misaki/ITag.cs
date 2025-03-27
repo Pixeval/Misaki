@@ -1,6 +1,6 @@
 namespace Misaki;
 
-public interface ITag : IMisakaModel
+public interface ITag : IMisakiModel
 {
     ITagCategory Category { get; }
 

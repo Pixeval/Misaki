@@ -1,6 +1,6 @@
 namespace Misaki;
 
-public interface INetworkArtworkAccessor : IMisakaModel
+public interface INetworkArtworkAccessor : IMisakiModel
 {
     Task<bool> PostFavoriteAsync(bool favorite);
 }
