@@ -3,4 +3,4 @@
 
 namespace Misaki;
 
-public readonly record struct TagCategory(string Name, string Description = "") : ITagCategory;
+public readonly record struct TagCategory(string Name, string TranslatedName = "", string Description = "") : ITagCategory;

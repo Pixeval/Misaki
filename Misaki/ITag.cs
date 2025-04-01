@@ -6,5 +6,7 @@ public interface ITag : IMisakiModel
 
     string Name { get; }
 
+    string TranslatedName { get; }
+
     string Description { get; }
 }

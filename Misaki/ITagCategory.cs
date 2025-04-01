@@ -6,11 +6,15 @@ public interface ITagCategory : IMisakiModel
 
     string Name { get; }
 
+    string TranslatedName { get; }
+
     string Description { get; }
 
     private readonly record struct EmptyCategory : ITagCategory
     {
         public string Name => "";
+
+        public string TranslatedName => "";
 
         public string Description => "";
     }
