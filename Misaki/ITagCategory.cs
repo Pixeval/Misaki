@@ -1,12 +1,8 @@
 namespace Misaki;
 
-public interface ITagCategory : IMisakiModel
+public interface ITagCategory : ITranslatedName
 {
     static ITagCategory Empty { get; } = new EmptyCategory();
-
-    string Name { get; }
-
-    string TranslatedName { get; }
 
     string Description { get; }
 

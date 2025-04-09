@@ -8,7 +8,7 @@ public interface IUser : IIdentityInfo
 
     Uri WebsiteUri { get; }
 
-    IReadOnlyList<IImageFrame> Avatar { get; }
+    IReadOnlyCollection<IImageFrame> Avatar { get; }
 
     IReadOnlyDictionary<string, Uri> ContactInformation { get; }
 

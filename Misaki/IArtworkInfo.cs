@@ -22,7 +22,7 @@ public interface IArtworkInfo : IIdentityInfo
 
     ILookup<ITagCategory, ITag> Tags { get; }
 
-    IReadOnlyList<IImageFrame> Thumbnails { get; }
+    IReadOnlyCollection<IImageFrame> Thumbnails { get; }
 
     IReadOnlyDictionary<string, object> AdditionalInfo { get; }
 
