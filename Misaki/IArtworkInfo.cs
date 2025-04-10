@@ -33,4 +33,6 @@ public interface IArtworkInfo : IIdentityInfo
     int TotalView { get; }
 
     bool IsFavorite { get; }
+
+    bool IsAiGenerated { get; }
 }

@@ -5,4 +5,5 @@ public enum ImageType
     SingleImage,
     SingleAnimatedImage,
     ImageSet,
+    Other
 }
