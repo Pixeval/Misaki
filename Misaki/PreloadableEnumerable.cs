@@ -12,13 +12,13 @@ public static class PreloadableEnumerable
 {
     public static IPreloadableEnumerable<T> Empty<T>() => new EmptyPreloadableEnumerable<T>();
     
-    public static IPreloadableEnumerable<T> ToPreloadableEnumerable<T>(this IEnumerable<T> source) => new PreloadableEnumerableWrapper<T>(source);
+    public static IPreloadableEnumerable<T> ToPreloadableEnumerable<T>(this IReadOnlyList<T> source) => new PreloadableEnumerableWrapper<T>(source);
     
     public static IPreloadableEnumerable<T> ToPreloadableEnumerable<T>(this IAsyncEnumerable<T> source) => new PreloadableEnumerableAsyncWrapper<T>(source);
 
     public static IPreloadableEnumerable<T> Create<T>(this ReadOnlySpan<T> source) => source.Length is 0 ? Empty<T>() : new PreloadableEnumerableWrapper<T>(source.ToArray());
 
-    private class PreloadableEnumerableWrapper<T>(IEnumerable<T> source) : IPreloadableEnumerable<T>
+    private class PreloadableEnumerableWrapper<T>(IReadOnlyList<T> source) : IPreloadableEnumerable<T>
     {
         public bool IsPreloaded => true;
 
@@ -29,6 +29,10 @@ public static class PreloadableEnumerable
         public IEnumerator<T> GetEnumerator() => source.GetEnumerator();
 
         IAsyncEnumerator<T> IAsyncEnumerable<T>.GetAsyncEnumerator(CancellationToken cancellationToken) => source.ToAsyncEnumerable().GetAsyncEnumerator(cancellationToken);
+
+        public int Count => source.Count;
+
+        public T this[int index] => source[index];
     }
     
     private class PreloadableEnumerableAsyncWrapper<T>(IAsyncEnumerable<T> source) : IPreloadableEnumerable<T>
@@ -51,6 +55,14 @@ public static class PreloadableEnumerable
             : ThrowHelper.InvalidOperation<IEnumerator<T>>("The enumerable has not been preloaded yet.");
 
         IAsyncEnumerator<T> IAsyncEnumerable<T>.GetAsyncEnumerator(CancellationToken cancellationToken) => source.GetAsyncEnumerator(cancellationToken);
+
+        public int Count => IsPreloaded
+            ? ((IReadOnlyList<T>) source).Count
+            : ThrowHelper.InvalidOperation<int>("The enumerable has not been preloaded yet.");
+
+        public T this[int index] => IsPreloaded
+            ? ((IReadOnlyList<T>) source)[index]
+            : ThrowHelper.InvalidOperation<T>("The enumerable has not been preloaded yet.");
     }
 
     private class EmptyPreloadableEnumerable<T> : IPreloadableEnumerable<T>
@@ -64,6 +76,10 @@ public static class PreloadableEnumerable
         public IEnumerator<T> GetEnumerator() => Enumerable.Empty<T>().GetEnumerator();
 
         IAsyncEnumerator<T> IAsyncEnumerable<T>.GetAsyncEnumerator(CancellationToken cancellationToken) => AsyncEnumerable.Empty<T>().GetAsyncEnumerator(cancellationToken);
+
+        public int Count => 0;
+
+        public T this[int index] => ThrowHelper.IndexOutOfRange<T>($"EmptyPreloadableEnumerable: {index} out of range");
     }
 }
 
@@ -153,4 +169,10 @@ internal static class ThrowHelper
     [MethodImpl(MethodImplOptions.NoInlining)]
     public static TReturn Json<TReturn>(string? message = null)
         => throw new JsonException(message);
+
+    /// <exception cref="IndexOutOfRangeException"/>
+    [DoesNotReturn]
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    public static TReturn IndexOutOfRange<TReturn>(string? message = null)
+        => throw new IndexOutOfRangeException(message);
 }

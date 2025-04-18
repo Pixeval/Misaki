@@ -1,12 +1,14 @@
 namespace Misaki;
 
-public interface IArtworkInfo : IIdentityInfo
+public interface IArtworkInfo : IImageSize, IIdentityInfo
 {
     string Title { get; }
 
     string Description { get; }
 
     Uri WebsiteUri { get; }
+
+    Uri AppUri { get; }
 
     DateTimeOffset CreateDate { get; }
 

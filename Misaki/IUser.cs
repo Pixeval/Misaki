@@ -8,6 +8,8 @@ public interface IUser : IIdentityInfo
 
     Uri WebsiteUri { get; }
 
+    Uri AppUri { get; }
+
     IReadOnlyCollection<IImageFrame> Avatar { get; }
 
     IReadOnlyDictionary<string, Uri> ContactInformation { get; }

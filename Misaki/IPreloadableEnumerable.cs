@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 namespace Misaki;
 
 [CollectionBuilder(typeof(PreloadableEnumerable), nameof(PreloadableEnumerable.Create))]
-public interface IPreloadableEnumerable<out T> : IEnumerable<T>, IAsyncEnumerable<T>
+public interface IPreloadableEnumerable<out T> : IReadOnlyList<T>, IAsyncEnumerable<T>
 {
     bool IsPreloaded { get; }
 
