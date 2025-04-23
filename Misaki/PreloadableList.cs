@@ -8,74 +8,70 @@ using System.Text.Json;
 
 namespace Misaki;
 
-public static class PreloadableEnumerable
+public delegate Task<IReadOnlyList<T>> PreloadableListAsyncGetter<T>(IMisakiService service);
+
+public static class PreloadableList
 {
-    public static IPreloadableEnumerable<T> Empty<T>() => new EmptyPreloadableEnumerable<T>();
+    public static IPreloadableList<T> Empty<T>() => new EmptyPreloadableList<T>();
     
-    public static IPreloadableEnumerable<T> ToPreloadableEnumerable<T>(this IReadOnlyList<T> source) => new PreloadableEnumerableWrapper<T>(source);
+    public static IPreloadableList<T> ToPreloadableEnumerable<T>(this IReadOnlyList<T> source) => new PreloadableListWrapper<T>(source);
     
-    public static IPreloadableEnumerable<T> ToPreloadableEnumerable<T>(this IAsyncEnumerable<T> source) => new PreloadableEnumerableAsyncWrapper<T>(source);
+    public static IPreloadableList<T> ToPreloadableEnumerable<T>(PreloadableListAsyncGetter<T> source) => new PreloadableListAsyncWrapper<T>(source);
 
-    public static IPreloadableEnumerable<T> Create<T>(this ReadOnlySpan<T> source) => source.Length is 0 ? Empty<T>() : new PreloadableEnumerableWrapper<T>(source.ToArray());
+    public static IPreloadableList<T> Create<T>(this ReadOnlySpan<T> source) => source.Length is 0 ? Empty<T>() : new PreloadableListWrapper<T>(source.ToArray());
 
-    private class PreloadableEnumerableWrapper<T>(IReadOnlyList<T> source) : IPreloadableEnumerable<T>
+    private class PreloadableListWrapper<T>(IReadOnlyList<T> source) : IPreloadableList<T>
     {
         public bool IsPreloaded => true;
 
-        public ValueTask PreloadEnumerableAsync() => ValueTask.CompletedTask;
+        public ValueTask PreloadListAsync(IMisakiService service) => ValueTask.CompletedTask;
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         public IEnumerator<T> GetEnumerator() => source.GetEnumerator();
-
-        IAsyncEnumerator<T> IAsyncEnumerable<T>.GetAsyncEnumerator(CancellationToken cancellationToken) => source.ToAsyncEnumerable().GetAsyncEnumerator(cancellationToken);
 
         public int Count => source.Count;
 
         public T this[int index] => source[index];
     }
     
-    private class PreloadableEnumerableAsyncWrapper<T>(IAsyncEnumerable<T> source) : IPreloadableEnumerable<T>
+    private class PreloadableListAsyncWrapper<T>(PreloadableListAsyncGetter<T> source) : IPreloadableList<T>
     {
-        private T[]? _cache;
+        private IReadOnlyList<T>? _cache;
 
         [MemberNotNullWhen(true, nameof(_cache))]
         public bool IsPreloaded => _cache is not null;
 
-        public async ValueTask PreloadEnumerableAsync()
+        public async ValueTask PreloadListAsync(IMisakiService service)
         {
             if (!IsPreloaded)
-                _cache = await source.ToArrayAsync();
+                _cache = await source(service);
         }
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         public IEnumerator<T> GetEnumerator() => IsPreloaded
-            ? ((IEnumerable<T>) _cache).GetEnumerator()
+            ? _cache.GetEnumerator()
             : ThrowHelper.InvalidOperation<IEnumerator<T>>("The enumerable has not been preloaded yet.");
 
-        IAsyncEnumerator<T> IAsyncEnumerable<T>.GetAsyncEnumerator(CancellationToken cancellationToken) => source.GetAsyncEnumerator(cancellationToken);
-
         public int Count => IsPreloaded
-            ? ((IReadOnlyList<T>) source).Count
+            ? _cache.Count
             : ThrowHelper.InvalidOperation<int>("The enumerable has not been preloaded yet.");
 
         public T this[int index] => IsPreloaded
-            ? ((IReadOnlyList<T>) source)[index]
+            ? _cache[index]
             : ThrowHelper.InvalidOperation<T>("The enumerable has not been preloaded yet.");
     }
 
-    private class EmptyPreloadableEnumerable<T> : IPreloadableEnumerable<T>
+    private class EmptyPreloadableList<T> : IPreloadableList<T>
     {
         public bool IsPreloaded => true;
 
-        public ValueTask PreloadEnumerableAsync() => ValueTask.CompletedTask;
+        public ValueTask PreloadListAsync(IMisakiService service) => ValueTask.CompletedTask;
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         public IEnumerator<T> GetEnumerator() => Enumerable.Empty<T>().GetEnumerator();
-
-        IAsyncEnumerator<T> IAsyncEnumerable<T>.GetAsyncEnumerator(CancellationToken cancellationToken) => AsyncEnumerable.Empty<T>().GetAsyncEnumerator(cancellationToken);
 
         public int Count => 0;
 

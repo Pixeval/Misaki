@@ -11,7 +11,7 @@ public record ImageFrame() : IImageFrame
     public required Uri ImageUri { get; init; }
 
     public ImageFrame(IImageSize frame, int wh, bool isWidth)
-        :this (isWidth ? wh : (int) ((double) wh * frame.Width) / frame.Height,
+        : this(isWidth ? wh : (int) ((double) wh * frame.Width) / frame.Height,
             isWidth ? (int) ((double) wh * frame.Height) / frame.Width : wh)
     {
     }

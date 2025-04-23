@@ -5,7 +5,7 @@ namespace Misaki;
 /// </remarks>
 public interface IImageSet : IArtworkInfo
 {
-    IPreloadableEnumerable<IArtworkInfo> Pages { get; }
+    IPreloadableList<ISingleImage> Pages { get; }
     
     int PageCount { get; }
 }

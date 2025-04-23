@@ -16,9 +16,9 @@ public interface IArtworkInfo : IImageSize, IIdentityInfo
 
     DateTimeOffset ModifyDate { get; }
 
-    IPreloadableEnumerable<IUser> Authors { get; }
+    IPreloadableList<IUser> Authors { get; }
 
-    IPreloadableEnumerable<IUser> Uploaders { get; }
+    IPreloadableList<IUser> Uploaders { get; }
 
     SafeRating SafeRating { get; }
 

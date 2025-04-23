@@ -1,10 +1,14 @@
 namespace Misaki;
 
-public interface IIdentityInfo : IMisakiModel
+public interface IIdentityInfo : IPlatformInfo, IMisakiModel
+{
+    string Id { get; }
+}
+
+
+public interface IPlatformInfo : IMisakiBase
 {
     string Platform { get; }
-
-    string Id { get; }
 
     const string Pixiv = "pixiv";
 

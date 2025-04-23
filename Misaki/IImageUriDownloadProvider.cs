@@ -1,10 +1,10 @@
 namespace Misaki;
 
-public interface IImageUriDownloadProvider : IMisakiService
+public interface IImageUriDownloadProvider : IMisakiService, IPlatformInfo
 {
-    string Schema { get; }
+    Func<Stream>? StreamProvider { get; set; }
 
-    Task<Stream> DownloadImageAsync(ISingleImage image, Stream? destination = null);
+    Task<Stream> DownloadSingleImageAsync(ISingleImage image, IImageFrame frame, IProgress<double>? progress = null, Stream? destination = null, CancellationToken token = default);
 
-    Task<IReadOnlyList<Stream>> DownloadAnimatedImagePreferredSeparatedAsync(ISingleImage image);
+    Task<IReadOnlyList<(Stream Image, int MsDelay)>> DownloadAnimatedImagePreferredSeparatedAsync(ISingleAnimatedImage image, IAnimatedImageFrame frame, IProgress<double>? progress = null, CancellationToken token = default);
 }

@@ -5,5 +5,8 @@ namespace Misaki;
 /// </remarks>
 public interface ISingleImage : IImageFrame, IArtworkInfo
 {
+    /// <summary>
+    /// Use -1 if not in a set
+    /// </summary>
     public int SetIndex { get; }
 }

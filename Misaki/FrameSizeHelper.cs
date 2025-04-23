@@ -2,16 +2,16 @@ namespace Misaki;
 
 public static class FrameSizeHelper
 {
-    private static void ThrowIfEmpty(IReadOnlyCollection<IImageFrame> frames)
+    private static void ThrowIfEmpty<T>(IReadOnlyCollection<T> frames)
     {
         if (frames.Count is 0)
             ThrowHelper.InvalidOperation("No frames available.");
     }
 
-    public static IImageFrame PickClosest(this IReadOnlyCollection<IImageFrame> frames, int width, int height)
+    public static T PickClosest<T>(this IReadOnlyCollection<T> frames, int width, int height) where T : IImageSize
     {
         ThrowIfEmpty(frames);
-        IImageFrame closest = null!;
+        T closest = default!;
         var closestDiff = int.MaxValue;
         foreach (var frame in frames)
         {
@@ -27,10 +27,10 @@ public static class FrameSizeHelper
         return closest;
     }
 
-    public static IImageFrame PickClosestHeight(this IReadOnlyCollection<IImageFrame> frames, int height)
+    public static T PickClosestHeight<T>(this IReadOnlyCollection<T> frames, int height) where T : IImageSize
     {
         ThrowIfEmpty(frames);
-        IImageFrame closest = null!;
+        T closest = default!;
         var closestDiff = int.MaxValue;
         foreach (var frame in frames)
         {
@@ -42,5 +42,22 @@ public static class FrameSizeHelper
             }
         }
         return closest;
+    }
+
+    public static T PickMax<T>(this IReadOnlyCollection<T> frames) where T : IImageSize
+    {
+        ThrowIfEmpty(frames);
+        T max = default!;
+        var maxDiff = int.MaxValue;
+        foreach (var frame in frames)
+        {
+            var diff = frame.Width * frame.Height;
+            if (diff > maxDiff)
+            {
+                max = frame;
+                maxDiff = diff;
+            }
+        }
+        return max;
     }
 }
