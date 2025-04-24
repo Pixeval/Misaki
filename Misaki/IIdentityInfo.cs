@@ -10,6 +10,8 @@ public interface IPlatformInfo : IMisakiBase
 {
     string Platform { get; }
 
+    const string All = "all";
+
     const string Pixiv = "pixiv";
 
     const string Danbooru = "danbooru";

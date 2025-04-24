@@ -8,13 +8,11 @@ public interface ISingleAnimatedImage : IAnimatedImageFrame, IArtworkInfo
     IPreloadableList<IAnimatedImageFrame> AnimatedThumbnails { get; }
 }
 
-[Flags]
 public enum SingleAnimatedImageType
 {
-    None = 0,
-    SingleFile = 1,
-    MultiFiles = 2,
-    Both = SingleFile | MultiFiles
+    SingleZipFile,
+    SingleFile,
+    MultiFiles
 }
 
 public interface IAnimatedImageFrame : IImageSize
@@ -22,12 +20,17 @@ public interface IAnimatedImageFrame : IImageSize
     SingleAnimatedImageType PreferredAnimatedImageType { get; }
 
     /// <summary>
-    /// Used when <see cref="PreferredAnimatedImageType"/> has <see cref="SingleAnimatedImageType.SingleFile"/>
+    /// Used when <see cref="PreferredAnimatedImageType"/> is <see cref="SingleAnimatedImageType.SingleFile"/> or <see cref="SingleAnimatedImageType.SingleZipFile"/>
     /// </summary>
     Uri? SingleImageUri { get; }
 
     /// <summary>
-    /// Used when <see cref="PreferredAnimatedImageType"/> has <see cref="SingleAnimatedImageType.MultiFiles"/>
+    /// Used when <see cref="PreferredAnimatedImageType"/> is <see cref="SingleAnimatedImageType.SingleZipFile"/>
+    /// </summary>
+    IPreloadableList<int>? ZipImageDelays { get; }
+
+    /// <summary>
+    /// Used when <see cref="PreferredAnimatedImageType"/> is <see cref="SingleAnimatedImageType.MultiFiles"/>
     /// </summary>
     IPreloadableList<(Uri Uri, int MsDelay)>? MultiImageUris { get; }
 }
@@ -39,23 +42,25 @@ public class AnimatedImageFrame : IAnimatedImageFrame
         SingleImageUri = singleImageUri;
         PreferredAnimatedImageType = SingleAnimatedImageType.SingleFile;
     }
-
+    
+    public AnimatedImageFrame(Uri singleImageUri, IPreloadableList<int> msDelay)
+    {
+        SingleImageUri = singleImageUri;
+        ZipImageDelays = msDelay;
+        PreferredAnimatedImageType = SingleAnimatedImageType.SingleZipFile;
+    }
+    
     public AnimatedImageFrame(IPreloadableList<(Uri Uri, int MsDelay)> multiImageUris)
     {
         MultiImageUris = multiImageUris;
         PreferredAnimatedImageType = SingleAnimatedImageType.MultiFiles;
     }
 
-    public AnimatedImageFrame(Uri singleImageUri, IPreloadableList<(Uri Uri, int MsDelay)> multiImageUris)
-    {
-        SingleImageUri = singleImageUri;
-        MultiImageUris = multiImageUris;
-        PreferredAnimatedImageType = SingleAnimatedImageType.Both;
-    }
-
     public SingleAnimatedImageType PreferredAnimatedImageType { get; }
 
     public Uri? SingleImageUri { get; }
+
+    public IPreloadableList<int>? ZipImageDelays { get; }
 
     public IPreloadableList<(Uri Uri, int MsDelay)>? MultiImageUris { get; }
 

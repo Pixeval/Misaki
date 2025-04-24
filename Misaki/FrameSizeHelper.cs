@@ -48,14 +48,14 @@ public static class FrameSizeHelper
     {
         ThrowIfEmpty(frames);
         T max = default!;
-        var maxDiff = int.MaxValue;
+        var maxArea = 0;
         foreach (var frame in frames)
         {
-            var diff = frame.Width * frame.Height;
-            if (diff > maxDiff)
+            var area = frame.Width * frame.Height;
+            if (area > maxArea)
             {
                 max = frame;
-                maxDiff = diff;
+                maxArea = area;
             }
         }
         return max;
