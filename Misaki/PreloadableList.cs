@@ -10,12 +10,25 @@ namespace Misaki;
 
 public delegate Task<IReadOnlyList<T>> PreloadableListAsyncGetter<T>(IMisakiService service);
 
+
+public delegate IReadOnlyList<T> PreloadableListParamGetter<out T, in TParam>(TParam param);
+
+
+public delegate Task<TParam> PreloadableListParamFactory<TParam>(IMisakiService service);
+
 public static class PreloadableList
 {
     public static IPreloadableList<T> Empty<T>() => new EmptyPreloadableList<T>();
     
     public static IPreloadableList<T> ToPreloadableEnumerable<T>(this IReadOnlyList<T> source) => new PreloadableListWrapper<T>(source);
     
+    public static IPreloadableList<T> ToPreloadableEnumerable<T, TParam>(TParam? param, PreloadableListParamFactory<TParam> paramFactory, PreloadableListParamGetter<T, TParam> source) where TParam : class
+    {
+        return param is null
+            ? new PreloadableListAsyncParamWrapper<T, TParam>(paramFactory, source)
+            : new PreloadableListWrapper<T>(source(param));
+    }
+
     public static IPreloadableList<T> ToPreloadableEnumerable<T>(PreloadableListAsyncGetter<T> source) => new PreloadableListAsyncWrapper<T>(source);
 
     public static IPreloadableList<T> Create<T>(this ReadOnlySpan<T> source) => source.Length is 0 ? Empty<T>() : new PreloadableListWrapper<T>(source.ToArray());
@@ -46,6 +59,36 @@ public static class PreloadableList
         {
             if (!IsPreloaded)
                 _cache = await source(service);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        public IEnumerator<T> GetEnumerator() => IsPreloaded
+            ? _cache.GetEnumerator()
+            : ThrowHelper.InvalidOperation<IEnumerator<T>>("The enumerable has not been preloaded yet.");
+
+        public int Count => IsPreloaded
+            ? _cache.Count
+            : ThrowHelper.InvalidOperation<int>("The enumerable has not been preloaded yet.");
+
+        public T this[int index] => IsPreloaded
+            ? _cache[index]
+            : ThrowHelper.InvalidOperation<T>("The enumerable has not been preloaded yet.");
+    }
+    
+    private class PreloadableListAsyncParamWrapper<T, TParam>(
+        PreloadableListParamFactory<TParam> paramFactory,
+        PreloadableListParamGetter<T, TParam> source) : IPreloadableList<T>
+    {
+        private IReadOnlyList<T>? _cache;
+
+        [MemberNotNullWhen(true, nameof(_cache))]
+        public bool IsPreloaded => _cache is not null;
+
+        public async ValueTask PreloadListAsync(IMisakiService service)
+        {
+            if (!IsPreloaded)
+                _cache = source(await paramFactory(service));
         }
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
