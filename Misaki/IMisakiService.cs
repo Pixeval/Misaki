@@ -1,3 +1,3 @@
 namespace Misaki;
 
-public interface IMisakiService : IMisakiBase;
+public interface IMisakiService : IPlatformInfo;

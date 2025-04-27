@@ -1,6 +1,6 @@
 namespace Misaki;
 
-public interface IDownloadHttpClientService : IMisakiService, IPlatformInfo
+public interface IDownloadHttpClientService : IMisakiService
 {
     HttpClient GetApiClient();
 

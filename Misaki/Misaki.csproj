@@ -5,10 +5,28 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <LangVersion>latest</LangVersion>
+        <IsAotCompatible>true</IsAotCompatible>
+
+        <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+        <Authors>Pixeval;Poker</Authors>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+        <GenerateDocumentationFile>True</GenerateDocumentationFile>
+        <Description>Misaki</Description>
+        <PackageTags></PackageTags>
+        <Title>$(AssemblyName)</Title>
+        <RepositoryUrl>https://github.com/Pixeval/Misaki.git</RepositoryUrl>
+        <PackageProjectUrl>https://github.com/Pixeval/Misaki</PackageProjectUrl>
+        <AssemblyVersion>1.0.0.1</AssemblyVersion>
+        <FileVersion>$(AssemblyVersion)</FileVersion>
+        <VersionPrefix>$(AssemblyVersion)</VersionPrefix>
+        <Version>$(AssemblyVersion)</Version>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="System.Linq.Async" Version="6.0.1" />
+        <None Include="..\README.md" Link="NuGet Info\README.md" Pack="true" PackagePath="/" />
     </ItemGroup>
 
 </Project>
