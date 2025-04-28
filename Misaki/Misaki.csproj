@@ -18,7 +18,7 @@
         <Title>$(AssemblyName)</Title>
         <RepositoryUrl>https://github.com/Pixeval/Misaki.git</RepositoryUrl>
         <PackageProjectUrl>https://github.com/Pixeval/Misaki</PackageProjectUrl>
-        <AssemblyVersion>1.0.0.1</AssemblyVersion>
+        <AssemblyVersion>1.0.0.3</AssemblyVersion>
         <FileVersion>$(AssemblyVersion)</FileVersion>
         <VersionPrefix>$(AssemblyVersion)</VersionPrefix>
         <Version>$(AssemblyVersion)</Version>

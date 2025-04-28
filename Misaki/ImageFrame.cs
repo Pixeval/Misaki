@@ -10,22 +10,10 @@ public record ImageFrame() : IImageFrame
 
     public required Uri ImageUri { get; init; }
 
-    public ImageFrame(IImageSize frame, int wh, bool isWidth)
-        : this(isWidth ? wh : (int) ((double) wh * frame.Width) / frame.Height,
-            isWidth ? (int) ((double) wh * frame.Height) / frame.Width : wh)
+    public ImageFrame(IImageSize size) : this()
     {
-    }
-
-    public ImageFrame(int width, int height) : this()
-    {
-        Width = width;
-        Height = height;
-    }
-
-    [AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
-    public class FixTypeAttribute(FixType fixType) : Attribute
-    {
-        public FixType FixType { get; } = fixType;
+        Width = size.Width;
+        Height = size.Height;
     }
     
     [AttributeUsage(AttributeTargets.Field)]
@@ -34,12 +22,5 @@ public record ImageFrame() : IImageFrame
         public int Width { get; } = width;
 
         public int Height { get; } = height;
-    }
-
-    public enum FixType
-    {
-        FixWidth,
-        FixHeight,
-        FixAll
     }
 }

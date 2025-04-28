@@ -2,21 +2,27 @@ namespace Misaki;
 
 public class AnimatedImageFrame : IAnimatedImageFrame
 {
-    public AnimatedImageFrame(Uri singleImageUri)
+    public AnimatedImageFrame(IImageSize size, Uri singleImageUri)
     {
+        Width = size.Width;
+        Height = size.Height;
         SingleImageUri = singleImageUri;
         PreferredAnimatedImageType = SingleAnimatedImageType.SingleFile;
     }
     
-    public AnimatedImageFrame(Uri singleImageUri, IPreloadableList<int> msDelay)
+    public AnimatedImageFrame(IImageSize size, Uri singleImageUri, IPreloadableList<int> msDelay)
     {
+        Width = size.Width;
+        Height = size.Height;
         SingleImageUri = singleImageUri;
         ZipImageDelays = msDelay;
         PreferredAnimatedImageType = SingleAnimatedImageType.SingleZipFile;
     }
     
-    public AnimatedImageFrame(IPreloadableList<(Uri Uri, int MsDelay)> multiImageUris)
+    public AnimatedImageFrame(IImageSize size, IPreloadableList<(Uri Uri, int MsDelay)> multiImageUris)
     {
+        Width = size.Width;
+        Height = size.Height;
         MultiImageUris = multiImageUris;
         PreferredAnimatedImageType = SingleAnimatedImageType.MultiFiles;
     }

@@ -12,10 +12,6 @@ public interface IArtworkInfo : IImageSize, IIdentityInfo
 
     DateTimeOffset CreateDate { get; }
 
-    DateTimeOffset UpdateDate { get; }
-
-    DateTimeOffset ModifyDate { get; }
-
     IPreloadableList<IUser> Authors { get; }
 
     IPreloadableList<IUser> Uploaders { get; }

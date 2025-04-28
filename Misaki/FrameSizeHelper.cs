@@ -2,16 +2,9 @@ namespace Misaki;
 
 public static class FrameSizeHelper
 {
-    private static void ThrowIfEmpty<T>(IReadOnlyCollection<T> frames)
+    public static T? PickClosest<T>(this IReadOnlyCollection<T> frames, int width, int height) where T : IImageSize
     {
-        if (frames.Count is 0)
-            ThrowHelper.InvalidOperation("No frames available.");
-    }
-
-    public static T PickClosest<T>(this IReadOnlyCollection<T> frames, int width, int height) where T : IImageSize
-    {
-        ThrowIfEmpty(frames);
-        T closest = default!;
+        T? closest = default;
         var closestDiff = int.MaxValue;
         foreach (var frame in frames)
         {
@@ -27,10 +20,9 @@ public static class FrameSizeHelper
         return closest;
     }
 
-    public static T PickClosestHeight<T>(this IReadOnlyCollection<T> frames, int height) where T : IImageSize
+    public static T? PickClosestHeight<T>(this IReadOnlyCollection<T> frames, int height) where T : IImageSize
     {
-        ThrowIfEmpty(frames);
-        T closest = default!;
+        T? closest = default;
         var closestDiff = int.MaxValue;
         foreach (var frame in frames)
         {
@@ -44,10 +36,9 @@ public static class FrameSizeHelper
         return closest;
     }
 
-    public static T PickMax<T>(this IReadOnlyCollection<T> frames) where T : IImageSize
+    public static T? PickMax<T>(this IReadOnlyCollection<T> frames) where T : IImageSize
     {
-        ThrowIfEmpty(frames);
-        T max = default!;
+        T? max = default;
         var maxArea = 0;
         foreach (var frame in frames)
         {
