@@ -4,7 +4,7 @@ public interface ISerializable : IMisakiModel
 {
     string Serialize();
 
-    static ISerializable Deserialize(string data) => ThrowHelper.NotSupported<ISerializable>();
+    static ISerializable Deserialize(string data) => throw new NotSupportedException();
 
     string SerializeKey { get; }
 }

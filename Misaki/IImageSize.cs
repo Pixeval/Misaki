@@ -8,7 +8,7 @@ public interface IImageSize : IMisakiModel
 
     double AspectRatio => (double) Width / Height;
 
-    public static IImageSize FixWidth(IImageSize size, int width)
+    static IImageSize FixWidth(IImageSize size, int width)
     {
         if (size.Width < width)
             return size;
@@ -16,7 +16,7 @@ public interface IImageSize : IMisakiModel
         return new ImageSize(width, height);
     }
 
-    public static IImageSize FixHeight(IImageSize size, int height)
+    static IImageSize FixHeight(IImageSize size, int height)
     {
         if (size.Height < height)
             return size;
@@ -24,28 +24,28 @@ public interface IImageSize : IMisakiModel
         return new ImageSize(width, height);
     }
 
-    public static IImageSize Uniform(IImageSize size, int width, int height)
+    static IImageSize Uniform(IImageSize size, int width, int height)
     {
         return size.AspectRatio > (double) width / height
             ? FixWidth(size, width)
             : FixHeight(size, height);
     }
 
-    public static IImageSize Uniform(IImageSize size, int wh)
+    static IImageSize Uniform(IImageSize size, int wh)
     {
         return size.AspectRatio > 1
             ? FixWidth(size, wh)
             : FixHeight(size, wh);
     }
 
-    public static IImageSize UniformToFill(IImageSize size, int width, int height)
+    static IImageSize UniformToFill(IImageSize size, int width, int height)
     {
         return size.AspectRatio > (double) width / height
             ? FixHeight(size, height)
             : FixWidth(size, width);
     }
 
-    public static IImageSize UniformToFill(IImageSize size, int wh)
+    static IImageSize UniformToFill(IImageSize size, int wh)
     {
         return size.AspectRatio > 1
             ? FixHeight(size, wh)
