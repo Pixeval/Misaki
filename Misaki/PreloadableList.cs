@@ -2,6 +2,7 @@
 // Licensed under the GPL v3 License.
 
 using System.Collections;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Misaki;
@@ -30,7 +31,8 @@ public static class PreloadableList
 
     public static IPreloadableList<T> ToPreloadableList<T>(AsyncGetter<T> source) => new AsyncWrapper<T>(source);
 
-    internal static IPreloadableList<T> Create<T>(ReadOnlySpan<T> source) => source.Length is 0 ? Empty<T>() : new Wrapper<T>(source.ToArray());
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public static IPreloadableList<T> Create<T>(ReadOnlySpan<T> source) => source.Length is 0 ? Empty<T>() : new Wrapper<T>(source.ToArray());
 
     private class Wrapper<T>(IReadOnlyList<T> source) : IPreloadableList<T>
     {
