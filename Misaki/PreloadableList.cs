@@ -1,9 +1,14 @@
 // Copyright (c) Misaki.
 // Licensed under the GPL v3 License.
 
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Misaki;
 
@@ -38,7 +43,7 @@ public static class PreloadableList
     {
         public bool IsPreloaded => true;
 
-        public ValueTask PreloadListAsync(IMisakiService service) => ValueTask.CompletedTask;
+        public ValueTask PreloadListAsync(IMisakiService service, CancellationToken token = default) => ValueTask.CompletedTask;
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
@@ -58,7 +63,7 @@ public static class PreloadableList
         [MemberNotNullWhen(true, nameof(Cache))]
         public bool IsPreloaded => Cache is not null;
 
-        public abstract ValueTask PreloadListAsync(IMisakiService service);
+        public abstract ValueTask PreloadListAsync(IMisakiService service, CancellationToken token = default);
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
@@ -77,7 +82,7 @@ public static class PreloadableList
 
     private class AsyncWrapper<T>(AsyncGetter<T> source) : AsyncWrapperBase<T>
     {
-        public override async ValueTask PreloadListAsync(IMisakiService service)
+        public override async ValueTask PreloadListAsync(IMisakiService service, CancellationToken token = default)
         {
             if (!IsPreloaded)
                 Cache = await source(service);
@@ -88,7 +93,7 @@ public static class PreloadableList
         ParamFactory<TParam> paramFactory,
         ParamGetter<T, TParam> source) : AsyncWrapperBase<T>
     {
-        public override async ValueTask PreloadListAsync(IMisakiService service)
+        public override async ValueTask PreloadListAsync(IMisakiService service, CancellationToken token = default)
         {
             if (!IsPreloaded)
                 Cache = source(await paramFactory(service));
@@ -99,7 +104,7 @@ public static class PreloadableList
     {
         public bool IsPreloaded => true;
 
-        public ValueTask PreloadListAsync(IMisakiService service) => ValueTask.CompletedTask;
+        public ValueTask PreloadListAsync(IMisakiService service, CancellationToken token = default) => ValueTask.CompletedTask;
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 

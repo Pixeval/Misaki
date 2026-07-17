@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+
 namespace Misaki;
 
 public static class FrameSizeHelper
@@ -12,7 +15,7 @@ public static class FrameSizeHelper
             {
                 var xDiff = frame.Width - width;
                 var yDiff = frame.Height - height;
-                var diff = xDiff * xDiff + yDiff * yDiff;
+                var diff = (xDiff * xDiff) + (yDiff * yDiff);
                 if (diff < closestDiff)
                 {
                     closest = frame;

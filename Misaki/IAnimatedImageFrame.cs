@@ -1,3 +1,5 @@
+using System;
+
 namespace Misaki;
 
 public interface IAnimatedImageFrame : IImageSize

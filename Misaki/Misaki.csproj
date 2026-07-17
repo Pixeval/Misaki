@@ -1,8 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net10.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
+        <TargetFrameworks>net8.0;net10.0</TargetFrameworks>
         <Nullable>enable</Nullable>
         <LangVersion>latest</LangVersion>
         <IsAotCompatible>true</IsAotCompatible>
@@ -13,12 +12,12 @@
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
         <GenerateDocumentationFile>True</GenerateDocumentationFile>
-        <Description>Misaki</Description>
+        <Description>A generic image list interface for the Pixiv and Booru APIs</Description>
         <PackageTags></PackageTags>
         <Title>$(AssemblyName)</Title>
         <RepositoryUrl>https://github.com/Pixeval/Misaki.git</RepositoryUrl>
         <PackageProjectUrl>https://github.com/Pixeval/Misaki</PackageProjectUrl>
-        <AssemblyVersion>1.0.0.5</AssemblyVersion>
+        <AssemblyVersion>1.0.0.6</AssemblyVersion>
         <FileVersion>$(AssemblyVersion)</FileVersion>
         <VersionPrefix>$(AssemblyVersion)</VersionPrefix>
         <Version>$(AssemblyVersion)</Version>
